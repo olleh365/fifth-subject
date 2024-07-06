@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'login_screen.dart';
 import 'weather_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 
 class WeatherScreen extends StatefulWidget {
@@ -42,6 +45,11 @@ class WeatherScreenState extends State<WeatherScreen> {
         isLoading = false;
       });
     }
+  }
+  void logout() async {
+    await FirebaseAuth.instance.signOut();
+    if (!mounted) return;
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   @override
@@ -89,6 +97,11 @@ class WeatherScreenState extends State<WeatherScreen> {
             ElevatedButton(
               onPressed: fetchWeather,
               child: const Text('날씨 호출'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: logout,
+              child: const Text('로그아웃'),
             ),
           ],
         ),
