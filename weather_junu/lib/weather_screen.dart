@@ -46,10 +46,12 @@ class WeatherScreenState extends State<WeatherScreen> {
       });
     }
   }
-  void logout() async {
+
+  Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
     if (!mounted) return;
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen()));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   @override
@@ -58,7 +60,8 @@ class WeatherScreenState extends State<WeatherScreen> {
       appBar: AppBar(
         title: const Text('Fourth Subject App'),
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

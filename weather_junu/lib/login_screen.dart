@@ -7,9 +7,9 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -23,8 +23,12 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
+        setState(() {
+          _isSigningIn = false;
+        });
         return;
       }
+
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
       final OAuthCredential credential = GoogleAuthProvider.credential(
@@ -34,21 +38,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
       final UserCredential userCredential = await _auth.signInWithCredential(credential);
 
-      if (!mounted) return;  // Check if the widget is still in the tree.
+      if (!mounted) return;
 
       if (userCredential.user != null) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const WeatherScreen()),
-        );
+        Navigator.of(context).pushReplacementNamed('/weather');
       }
     } catch (e) {
       if (!mounted) return;  // Check if the widget is still in the tree.
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to sign in with Google: $e'),
+          content: Text('구글 로그인 실패: $e'),
         ),
       );
+    }finally {
+      if (mounted) {
+        setState(() {
+          _isSigningIn = false;
+        });
+      }
     }
   }
 
