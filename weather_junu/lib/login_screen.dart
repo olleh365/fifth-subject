@@ -47,8 +47,8 @@ class LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;  // Check if the widget is still in the tree.
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('구글 로그인 실패: $e'),
+        const SnackBar(
+          content: Text('구글 로그인에 실패했습니다. 나중에 다시 시도해 주세요.'),
         ),
       );
     }finally {
@@ -63,6 +63,7 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Login"),
       ),
@@ -71,10 +72,15 @@ class LoginScreenState extends State<LoginScreen> {
             ? const CircularProgressIndicator()
             : ElevatedButton(
           onPressed: _signInWithGoogle,
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(150, 50),
+          style: OutlinedButton.styleFrom(
+            minimumSize: const Size(300, 50),
+            backgroundColor: Colors.white,
+            side: const BorderSide(color: Color(0xffd3d3d3)),
+            shadowColor: Colors.transparent,
           ),
-          child: const Text("Sign in with Google"),
+          child: const Text("구글로 시작하기",
+            style: TextStyle(color: Colors.black,fontSize: 15),
+          ),
         ),
       ),
     );
