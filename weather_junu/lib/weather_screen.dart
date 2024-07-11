@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'login_screen.dart';
 import 'weather_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 
 
@@ -50,9 +49,9 @@ class WeatherScreenState extends State<WeatherScreen> {
 
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().signOut();
     if (!mounted) return;
-    Navigator.of(context).pushReplacementNamed('/login');
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   @override
@@ -74,7 +73,6 @@ class WeatherScreenState extends State<WeatherScreen> {
               ),
               keyboardType: TextInputType.number,
             ),
-            const SizedBox(height: 10),
             TextFormField(
               controller: _lonController,
               decoration: const InputDecoration(
@@ -83,7 +81,6 @@ class WeatherScreenState extends State<WeatherScreen> {
               ),
               keyboardType: TextInputType.number,
             ),
-            const SizedBox(height: 20),
             if(isLoading)
               const CircularProgressIndicator()
             else
