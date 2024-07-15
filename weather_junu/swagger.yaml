@@ -1,0 +1,160 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  description: API documentation for a sample application
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /users:
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '404':
+          description: User not found
+    put:
+      summary: Update a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '404':
+          description: User not found
+    delete:
+      summary: Delete a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: User deleted successfully
+        '404':
+          description: User not found
+  /weather:
+    get:
+      summary: Get weather information
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Latitude of the location
+        - name: lon
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Longitude of the location
+        - name: appid
+          in: query
+          required: true
+          schema:
+            type: string
+          description: API key for authentication
+      responses:
+        '200':
+          description: Weather information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  temp:
+                    type: number
+                    description: Temperature in Celsius
+                  humidity:
+                    type: integer
+                    description: Humidity percentage
+                  wind_speed:
+                    type: number
+                    description: Wind speed in meters per second
+        '400':
+          description: Invalid request parameters
